@@ -1,0 +1,11 @@
+v0.1
+- Initial version
+
+
+match = re.compile('<div class=\"shows-current\">(?s).*</div>').findall(current_shows)
+    match = re.compile('<li class=\"\">(.*\n.*\n.*\n.*\n.*\n.*\n.*\n)').findall(str(match[0]))
+    shows_list = []
+    for shows_content in match:
+        #match = re.compile('<li class=\"\">(.*\n.*\n.*\n.*\n.*\n.*\n.*\n)').findall(str(shows_content))
+        print shows_content
+        #shows_list.append()
