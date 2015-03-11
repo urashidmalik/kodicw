@@ -33,9 +33,10 @@ def getShowsList():
         show_name_match = re.compile('<p class=\"t\">(.*)</p>').findall(str(shows_content))
         show_url_match = re.compile('<a class=\"hublink\" href=\"(.*)\">').findall(str(shows_content))
         if show_name_match[0] != "More Video" :
-            show_dic = dict(image=img_match[0][2], name=show_name_match[0], url=show_url_match[0])
+            show_dic = dict(image=img_match[0][2], name=show_name_match[0], url=url_dict.get("main")+show_url_match[0])
         shows_list.append(show_dic)
     return shows_list
 
 allShows = getShowsList()
+pprint(allShows)
 
