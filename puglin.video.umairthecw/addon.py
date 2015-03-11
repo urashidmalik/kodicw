@@ -9,19 +9,30 @@ url_dict = {
     "shows": "http://www.cwtv.com/shows/"
 
 }
-def getShowsList():
+
+def __get_cw_page_(url, ref_url='http://www.cwtv.com/shows/the-flash/'):
+    """
+    Helper function to get the page data
+
+    :param url: Url to be fetched
+    :param ref_url: Referencing URL
+    :return: Page Data in Text
+    """
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10')
+    req.add_header('Referer', base64.b64decode(ref_url))
+    response = urllib2.urlopen(req)
+    data = response.read()
+    response.close()
+    return data
+
+def get_shows_list():
     """
     Gets the current running shows
     :return List [] containing Dict {}
 
     """
-    req = urllib2.Request(url_dict.get("shows"))
-    req.add_header('User-Agent', 'Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10')
-    req.add_header('Referer', base64.b64decode('http://www.cwtv.com/shows/the-flash/'))
-    response = urllib2.urlopen(req)
-    current_shows = response.read()
-    response.close()
-
+    current_shows = __get_cw_page_(url_dict.get("shows"))
     # Gets Current Show Div which contains all shows
     match = re.compile('(<ul class=\"shows\">(?s).*?</ul>)').findall(current_shows)
 
@@ -37,6 +48,33 @@ def getShowsList():
         shows_list.append(show_dic)
     return shows_list
 
-allShows = getShowsList()
-pprint(allShows)
+
+def get_last_five_episodes(show_dict):
+    """
+    Fetches Latest Five Episodes for requested show
+
+    :param show_dict: Dictionary containing image, name, url
+    :return: episode_list: List [] containing Dict {} image, name, url
+    """
+    current_episodes = __get_cw_page_(show_dict.get("url"))
+
+    # Gets Current Show Div which contains all shows
+    match = re.compile('<ul id=\"list_1\"((.|\n)*?)<\/ul>').findall(current_episodes)
+
+    img_match = re.compile('img src="(.*)"').findall(match[0][0])
+    name_match = re.compile('videodetails1.*\n.*<p>(.*)<').findall(match[0][0])
+    url_match = re.compile('<a class="thumbLink" href="(.*)">').findall(match[0][0])
+    episode_list = []
+    i = 0
+    for name in name_match :
+        episode_dict = dict(image=img_match[i], name=name_match[i], url=url_dict.get("main")+url_match[i])
+        i += 1
+        episode_list.append(episode_dict)
+    return episode_list
+
+##########################################################
+
+allShows = get_shows_list()
+allEpisodes = get_last_five_episodes(allShows[0])
+pprint(allEpisodes)
 
