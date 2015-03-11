@@ -1,6 +1,10 @@
 import base64
 import urllib2
 import re
+import sys
+import xbmcgui
+import xbmcplugin
+import m3u8
 from pprint import  pprint
 
 
@@ -74,7 +78,16 @@ def get_last_five_episodes(show_dict):
 
 ##########################################################
 
-allShows = get_shows_list()
-allEpisodes = get_last_five_episodes(allShows[0])
-pprint(allEpisodes)
+#allShows = get_shows_list()
+#allEpisodes = get_last_five_episodes(allShows[0])
+#pprint(allEpisodes)
+#m3u8_obj = m3u8.load("http://hlsioscwtv.warnerbros.com/hls/2015/02/24/Arrow-315-NandaParbat-3J5165-CW-Stereo_a12c4752a_2100kbps/Arrow-315-NandaParbat-3J5165-CW-Stereo_a12c4752a_2100kbps.m3u8");
+#m3u8_obj = m3u8.load("http://www.cwtv.com/shows/arrow")
+#print( m3u8_obj.segments)
 
+addon_handle = init(sys.argv[1])
+xbmcplugin.setContent(addon_handle, 'movies')
+url = ''
+li = xbmcgui.ListItem("My First Video", iconImage='DefaultIcon.png')
+xbmcplugin.addDirectoryItem(handle=addon_handle,url=url,listitem=li)
+xbmcplugin.endOfDirectory(addon_handle)
