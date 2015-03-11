@@ -4,7 +4,7 @@ import re
 import sys
 import xbmcgui
 import xbmcplugin
-import m3u8
+#import m3u8
 from pprint import  pprint
 
 
