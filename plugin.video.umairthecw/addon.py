@@ -85,9 +85,12 @@ def get_last_five_episodes(show_dict):
 #m3u8_obj = m3u8.load("http://www.cwtv.com/shows/arrow")
 #print( m3u8_obj.segments)
 
-addon_handle = init(sys.argv[1])
+addon_handle = int(sys.argv[1])
+
 xbmcplugin.setContent(addon_handle, 'movies')
-url = ''
-li = xbmcgui.ListItem("My First Video", iconImage='DefaultIcon.png')
-xbmcplugin.addDirectoryItem(handle=addon_handle,url=url,listitem=li)
+
+url = 'http://localhost/some_video.mkv'
+li = xbmcgui.ListItem('My First Video!', iconImage='DefaultVideo.png')
+xbmcplugin.addDirectoryItem(handle=addon_handle, url=url, listitem=li)
+
 xbmcplugin.endOfDirectory(addon_handle)
