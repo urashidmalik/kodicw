@@ -42,13 +42,20 @@ def add_episode(id):
     """
     current_episode_list = cwtv.get_last_five_episodes(cwtv.get_show_dict_by_id(id))
     for current_episode in current_episode_list:
-        url = build_url({'mode': 'episode', 'id': current_episode['id']})
+        url = build_url({'mode': 'episode', 'id': current_episode['id'], 'show_id':id})
         li = xbmcgui.ListItem(current_episode['name'], iconImage=current_episode['image'])
         xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                     listitem=li, isFolder=True)
     xbmcplugin.endOfDirectory(addon_handle)
 ###############################################################################################
+def playShow(id):
 
+    #url = 'http://www.nasa.gov/multimedia/nasatv/NTV-Public-IPS.m3u8'
+    url = 'http://hlsioscwtv.warnerbros.com/hls/2015/02/24/Arrow-315-NandaParbat-3J5165-CW-Stereo_a12c4752a_640kbps/Arrow-315-NandaParbat-3J5165-CW-Stereo_a12c4752a_640kbps.m3u8'
+    video_url= '%s playpath=%s pageUrl=%s swfUrl=%s token=%s timeout=20'%(rtmp_url,play_path,pageUrl,'https://secure.footprint.net/cwtv/cwtv/digital-smiths/production_player/4_1/vsplayer.swf','%ZZri(nKa@#Z')
+
+    xbmc.Player().play(url)
+###############################################################################################
 
 
 mode = args.get('mode', None)
@@ -58,6 +65,8 @@ if mode is None:
 elif mode[0] == 'show':
     print 'Adding Episodes'
     add_episode(args.get('id')[0])
+elif mode[0] == 'episode':
+    playShow(args.get('id')[0])
 
 
 # if mode is None:

@@ -92,8 +92,7 @@ def get_show_dict_by_id(id):
         if current_show['id'] == id:
             assert isinstance(current_show, object)
             return current_show
-
-##########################################################
+###############################################################################################
 
 #allShows = get_shows_list()
 #pprint(allShows[4])
