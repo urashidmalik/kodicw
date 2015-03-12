@@ -8,6 +8,7 @@ from resources.lib import cwtv
 base_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
+current_show_list = cwtv.get_shows_list()
 
 xbmcplugin.setContent(addon_handle, 'cwtv')
 
@@ -16,20 +17,31 @@ xbmcplugin.setContent(addon_handle, 'cwtv')
 def build_url(query):
     return base_url + '?' + urllib.urlencode(query)
 
-def addShows():
-    current_show_list = cwtv.get_shows_list()
-    mode = args.get('mode', None)
-    if mode is None:
-        for current_show in current_show_list:
-            rl = build_url({'mode': 'folder', current_show.id: current_show.name})
-            li = xbmcgui.ListItem(current_show.name, iconImage=current_show.image)
-            xbmcplugin.addDirectoryItem(handle=addon_handle, url=current_show.url,
+def add_shows():
+    for current_show in current_show_list:
+        url = build_url(current_show)
+        li = xbmcgui.ListItem(current_show['name'], iconImage=current_show['image'])
+        xbmcplugin.addDirectoryItem(handle=addon_handle, url=url,
                                     listitem=li, isFolder=True)
+    xbmcplugin.endOfDirectory(addon_handle)
+
+def add_episode():
+    for current_show in current_show_list:
+        current_episode_list = cwtv.get_last_five_episodes(current_show)
+        url1 = build_url(current_show)
+        for current_episode in current_episode_list:
+            url = build_url(current_episode)
+            li = xbmcgui.ListItem(current_episode['name'], iconImage=current_episode['image'])
+            xbmcplugin.addDirectoryItem(handle=addon_handle, url=url1,
+                                        listitem=li, isFolder=True)
         xbmcplugin.endOfDirectory(addon_handle)
 
-
-addShows()
-
+mode = args.get('mode', None)
+if mode is None:
+    add_shows()
+elif mode[0] == 'show':
+    add_episode()
+    pass
 
 # if mode is None:
 #     url = build_url({'mode': 'folder', 'foldername': 'Folder One'})
