@@ -11,7 +11,7 @@ url_dict = {
     "shows": "http://www.cwtv.com/shows/"
 
 }
-
+###############################################################################################
 def __get_cw_page_(url, ref_url='http://www.cwtv.com/shows/the-flash/'):
     """
     Helper function to get the page data
@@ -31,7 +31,7 @@ def __get_cw_page_(url, ref_url='http://www.cwtv.com/shows/the-flash/'):
     data = response.read()
     response.close()
     return data
-
+###############################################################################################
 def get_shows_list():
     """
     Gets the current running shows
@@ -55,8 +55,7 @@ def get_shows_list():
                             id=show_name_match[0].replace(" ", ""))
         shows_list.append(show_dic)
     return shows_list
-
-
+###############################################################################################
 def get_last_five_episodes(show_dict):
     """
     Fetches Latest Five Episodes for requested show
@@ -81,6 +80,18 @@ def get_last_five_episodes(show_dict):
         i += 1
         episode_list.append(episode_dict)
     return episode_list
+###############################################################################################
+def get_show_dict_by_id(id):
+    """
+    Returns a show dictioanry if id is provided
+    :param id:
+    :return: show_dict
+    """
+    current_show_list = get_shows_list()
+    for current_show in current_show_list:
+        if current_show['id'] == id:
+            assert isinstance(current_show, object)
+            return current_show
 
 ##########################################################
 
